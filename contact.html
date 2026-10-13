@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact | Explore Baco</title>
+
+  <link rel="icon" href="logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Libre+Franklin:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    :root {
+      --forest: #1F4D3A;
+      --cream: #F7F3E8;
+      --gold: #E8B85C;
+      --ink: #1E2A24;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'Libre Franklin', sans-serif;
+    }
+
+    h1, h2, h3, .brand-title { font-family: 'Playfair Display', serif; }
+
+    .wrap { width: min(100% - 40px, 1180px); margin: auto; }
+
+    .site-logo { width: 60px; height: 55px; object-fit: contain; }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 13px 22px;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 12px;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+    }
+    .pill:disabled { opacity: .6; cursor: wait; }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #b9c5ba;
+      border-radius: 10px;
+      background: white;
+      font: inherit;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .paper {
+      background: #fffdf8;
+      border: 1px solid #e9e1d1;
+      border-radius: 18px;
+      box-shadow: 0 14px 35px #17392a12;
+    }
+
+    .eyebrow {
+      color: #95681C;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 3px;
+    }
+
+    /* Spam trap: hidden from people, visible to bots */
+    .hp { position: absolute; left: -9999px; }
+
+    .mobile-menu-button { display: none; border: 1px solid #d9d5c9; border-radius: 10px; padding: 8px 12px; color: var(--forest); background: transparent; font-size: 24px; cursor: pointer; }
+    .mobile-nav { padding: 10px 20px 16px; border-top: 1px solid #e2dece; background: var(--cream); }
+    .mobile-nav a { display: block; padding: 11px 12px; color: var(--forest); text-decoration: none; font-size: 14px; font-weight: 600; border-radius: 8px; }
+    .mobile-nav a:hover, .mobile-nav a:focus { background: #e8ebdf; }
+    .mobile-nav .mobile-book { margin-top: 6px; background: var(--forest); color: white; }
+    @media (max-width: 760px) {
+      .desktop-nav { display: none; }
+      .mobile-menu-button { display: inline-flex; align-items: center; justify-content: center; }
+      .wrap { width: calc(100% - 28px); }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-50 border-b border-[#e2dece] bg-[#F7F3E8]/95">
+    <div class="wrap flex items-center justify-between gap-4 py-3">
+
+      <a href="index.html" class="flex items-center gap-2">
+        <img src="logo.png" alt="Explore Baco Logo" class="site-logo">
+        <span>
+          <strong class="brand-title block text-[#1F4D3A]">EXPLORE BACO</strong>
+          <small class="text-[#1F4D3A] tracking-widest">ORIENTAL MINDORO, PHILIPPINES</small>
+        </span>
+      </a>
+
+      <nav class="desktop-nav flex items-center gap-4 text-xs font-semibold">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="destinations.html">Destinations</a>
+        <a href="packages.html">Tour Packages</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="guide.html">Travel Guide</a>
+        <a href="contact.html" class="font-bold text-[#95681C]">Contact</a>
+        <a href="booking.html" class="pill bg-[#1F4D3A] text-white">BOOK NOW</a>
+      </nav>
+      <button type="button" id="contactMenuToggle" class="mobile-menu-button" aria-label="Open navigation menu" aria-controls="contactMobileMenu" aria-expanded="false">
+        <span aria-hidden="true">☰</span>
+      </button>
+    </div>
+    <nav id="contactMobileMenu" class="mobile-nav" aria-label="Mobile navigation" hidden>
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="destinations.html">Destinations</a>
+      <a href="packages.html">Tour Packages</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="guide.html">Travel Guide</a>
+      <a href="contact.html" aria-current="page">Contact</a>
+      <a href="booking.html" class="mobile-book">BOOK NOW →</a>
+    </nav>
+  </header>
+
+  <!-- CONTACT SECTION -->
+  <main>
+    <section class="bg-[#e8ebdf] py-16 md:py-24">
+      <div class="wrap">
+
+        <p class="eyebrow">GET IN TOUCH WITH ME</p>
+
+        <h1 class="mt-3 text-3xl font-bold uppercase text-[#1F4D3A] md:text-5xl">
+          Contact Us
+        </h1>
+
+        <p class="mt-5 mb-10 max-w-2xl leading-7">
+          Curious about Baco, Oriental Mindoro? Whether you have a question about
+          getting there, what to see, or what to bring, send me a message and I'll
+          get back to you as soon as I can.
+        </p>
+
+        <div class="grid items-start gap-8 lg:grid-cols-[1.5fr_1fr]">
+
+          <!-- MESSAGE FORM -->
+          <div class="paper p-6 md:p-9">
+
+            <form id="contactForm" novalidate>
+
+              <div class="grid gap-5 sm:grid-cols-2">
+
+                <div>
+                  <label for="name">Full Name *</label>
+                  <input id="name" name="name" placeholder="Enter your full name" required maxlength="100">
+                </div>
+
+                <div>
+                  <label for="email">Email Address *</label>
+                  <input id="email" name="email" type="email" placeholder="you@example.com" required maxlength="150">
+                </div>
+
+                <div class="sm:col-span-2">
+                  <label for="topic">What is your message about? *</label>
+                  <select id="topic" name="topic" required>
+                    <option value="General question">General question</option>
+                    <option value="Travel tips and directions">Travel tips and directions</option>
+                    <option value="Destinations and activities">Destinations and activities</option>
+                    <option value="Feedback or suggestions">Feedback or suggestions</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+
+              </div>
+
+              <div class="mt-5">
+                <label for="message">Your Message *</label>
+                <textarea id="message" name="message" rows="6" required maxlength="2000"
+                  placeholder="Write your message here..."></textarea>
+              </div>
+
+              <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+              <p id="status" class="mt-4 text-sm font-semibold" aria-live="polite"></p>
+
+              <button id="submitBtn" type="submit" class="pill mt-5 w-full bg-[#1F4D3A] text-white sm:w-auto">
+                SEND MESSAGE
+              </button>
+
+            </form>
+
+            <div id="success" hidden class="mt-5">
+              <h2 class="text-2xl font-bold text-[#1F4D3A]">Thank you!</h2>
+              <p id="successDetails" class="mt-3 leading-7"></p>
+              <p class="mt-3 text-sm">I'll reply to your email as soon as I can.</p>
+              <button id="resetForm" type="button" class="pill mt-5 bg-[#1F4D3A] text-white">
+                SEND ANOTHER MESSAGE
+              </button>
+            </div>
+
+          </div>
+
+          <!-- CONTACT DETAILS -->
+          <aside class="rounded-2xl bg-[#1F4D3A] p-7 text-white md:p-9">
+
+            <p class="eyebrow" style="color:#E8B85C">REACH ME DIRECTLY</p>
+
+            <h2 class="mt-3 text-2xl font-bold">Let's Talk About Baco</h2>
+
+            <p class="mt-4 text-sm leading-7">
+              Prefer to message me directly? Use any of the details below.
+            </p>
+
+            <div class="mt-7 border-t border-white/30 pt-6">
+              <h3 class="text-xl font-bold text-[#E8B85C]">Contact Details</h3>
+
+              <p class="mt-4 font-semibold">Keziah Mae Catoy Comia</p>
+              <p class="mt-3">📍 Canubing I, Calapan City, Oriental Mindoro, Philippines</p>
+              <p class="mt-3 break-words">✉️ <a href="mailto:keziahcomia@gmail.com">keziahcomia@gmail.com</a></p>
+              <p class="mt-3">📞 <a href="tel:+639811614242">0981 161 4242</a></p>
+            </div>
+
+            <div class="mt-7 border-t border-white/30 pt-6">
+              <h3 class="text-xl font-bold text-[#E8B85C]">You Can Ask Me About</h3>
+              <ul class="mt-4 list-disc pl-5 text-sm leading-7">
+                <li>How to get to Baco from Calapan</li>
+                <li>Rivers, falls, and nature spots to visit</li>
+                <li>Local culture and the Mangyan communities</li>
+                <li>Tips on what to bring and when to go</li>
+              </ul>
+            </div>
+
+            <p class="mt-6 text-xs leading-6">
+              Explore Baco is a tourism website concept for a
+              college project and is not an official municipal
+              tourism office.
+            </p>
+
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-[#F7F3E8] py-8">
+    <div class="wrap flex flex-col justify-between gap-5 sm:flex-row sm:items-center">
+
+      <a href="index.html" class="flex items-center gap-2">
+        <img src="logo.png" alt="Explore Baco Logo" class="site-logo">
+        <span>
+          <strong class="brand-title block text-[#1F4D3A]">EXPLORE BACO</strong>
+          <small class="text-[#1F4D3A]">ORIENTAL MINDORO, PHILIPPINES</small>
+        </span>
+      </a>
+
+      <nav aria-label="Footer navigation" class="flex flex-wrap gap-x-4 gap-y-2 text-xs font-semibold">
+        <a href="index.html" class="text-[#1F4D3A]">Home</a>
+        <a href="about.html" class="text-[#1F4D3A]">About</a>
+        <a href="destinations.html" class="text-[#1F4D3A]">Destinations</a>
+        <a href="packages.html" class="text-[#1F4D3A]">Tour Packages</a>
+        <a href="gallery.html" class="text-[#1F4D3A]">Gallery</a>
+        <a href="guide.html" class="text-[#1F4D3A]">Travel Guide</a>
+        <a href="contact.html" class="text-[#95681C]" aria-current="page">Contact</a>
+      </nav>
+      <p class="text-xs leading-6">
+        © 2026 Explore Baco<br>
+        Service. Sustainability. Smiles.
+      </p>
+
+    </div>
+  </footer>
+
+  <script>
+    // Messages are delivered to this inbox via FormSubmit (no API key needed).
+    const FORM_ENDPOINT = 'https://formsubmit.co/ajax/keziahcomia@gmail.com';
+
+    const $ = id => document.getElementById(id);
+    const form = $('contactForm');
+    const statusEl = $('status');
+    const submitBtn = $('submitBtn');
+
+    const showStatus = (text, isError = true) => {
+      statusEl.textContent = text;
+      statusEl.style.color = isError ? '#a12b19' : '';
+    };
+
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+      showStatus('');
+
+      if (!form.reportValidity()) return;
+
+      const payload = {
+        _subject: 'New Message - Explore Baco',
+        _template: 'table',
+        _captcha: 'false',
+        _honey: form.elements._honey.value,
+        Name: $('name').value.trim(),
+        Email: $('email').value.trim(),
+        Topic: $('topic').value,
+        Message: $('message').value.trim()
+      };
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'SENDING...';
+      showStatus('Sending your message...', false);
+
+      try {
+        const response = await fetch(FORM_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const result = await response.json().catch(() => ({}));
+
+        if (!response.ok || result.success === 'false') {
+          throw new Error(result.message || 'Request failed');
+        }
+
+        $('successDetails').textContent =
+          'Thanks, ' + payload.Name + '! Your message about "' + payload.Topic + '" has been sent.';
+        form.hidden = true;
+        $('success').hidden = false;
+        showStatus('');
+      } catch (error) {
+        showStatus('Sorry, your message could not be sent. Please try again or email keziahcomia@gmail.com directly.');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'SEND MESSAGE';
+      }
+    });
+
+    $('resetForm').addEventListener('click', () => {
+      form.reset();
+      form.hidden = false;
+      $('success').hidden = true;
+      showStatus('');
+    });
+
+    const contactMenuToggle = $('contactMenuToggle');
+    const contactMobileMenu = $('contactMobileMenu');
+    contactMenuToggle.addEventListener('click', () => {
+      const isExpanded = contactMenuToggle.getAttribute('aria-expanded') === 'true';
+      contactMenuToggle.setAttribute('aria-expanded', String(!isExpanded));
+      contactMenuToggle.setAttribute('aria-label', isExpanded ? 'Open navigation menu' : 'Close navigation menu');
+      contactMobileMenu.hidden = isExpanded;
+    });
+  </script>
+
+</body>
+</html>
