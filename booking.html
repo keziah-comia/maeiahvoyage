@@ -1048,9 +1048,7 @@
                   autocomplete="off">
               </div>
               <p data-template-id="form-disclaimer" class="canva-text text-xs leading-relaxed mt-5"
-                style="color: rgb(30, 42, 36); font-weight: 400; font-style: normal; font-size: 16px;">Before production
-                use, replace YOUR_ACCESS_KEY with your own Web3Forms access key. Until configured, this form cannot send
-                inquiries. Estimates are not final quotations.</p>
+                style="color: rgb(30, 42, 36); font-weight: 400; font-style: normal; font-size: 16px;"></p>
               <p id="formStatus" role="alert" aria-live="assertive" class="mt-4 text-sm font-semibold" hidden=""></p>
               <button id="submitButton" type="submit" data-template-id="submit-button"
                 class="canva-button pill mt-6 w-full sm:w-auto"
@@ -1115,71 +1113,278 @@
     </figure>
   </div>
   <script>
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const scrollToSection = id => document.getElementById(id)?.scrollIntoView({behavior: reduceMotion.matches ? 'instant' : 'smooth'});
-    const menu = document.getElementById('menu'), toggle = document.getElementById('menuToggle');
-    function closeMenu() {menu.hidden = true; toggle.setAttribute('aria-expanded', 'false'); toggle.setAttribute('aria-label', 'Open navigation menu')}
-    toggle.addEventListener('click', () => {menu.hidden = !menu.hidden; toggle.setAttribute('aria-expanded', String(!menu.hidden)); toggle.setAttribute('aria-label', menu.hidden ? 'Open navigation menu' : 'Close navigation menu')});
-    menu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
-    document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => {const id = a.getAttribute('href').slice(1); if (document.getElementById(id)) {e.preventDefault(); scrollToSection(id)} }));
-    const back = document.getElementById('backTop');
-    window.addEventListener('scroll', () => {back.hidden = window.scrollY < 450}, {passive: true});
-    back.addEventListener('click', () => window.scrollTo({top: 0, behavior: reduceMotion.matches ? 'instant' : 'smooth'}));
+    
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-    const prices = {river: {name: 'Baco River Day Trip', price: 1500}, weekend: {name: 'Baco Nature Weekend', price: 3800}, culture: {name: 'Baco Culture and Adventure', price: 6200}};
-    const packageField = document.getElementById('package'), guestsField = document.getElementById('guests'), totalField = document.getElementById('estimated_total');
-    const money = n => new Intl.NumberFormat('en-PH', {style: 'currency', currency: 'PHP', maximumFractionDigits: 0}).format(n);
-    function estimate() {
-      const item = prices[packageField.value] || prices.river, raw = Number(guestsField.value), guests = Number.isInteger(raw) && raw >= 1 && raw <= 100 ? raw : 0;
-      const discount = guests >= 5; const total = item.price * guests * (discount ? .9 : 1);
-      totalField.value = guests ? money(total) : 'Enter 1–100 guests';
-      document.getElementById('summaryPackage').textContent = item.name + ' · ' + money(item.price) + '/person';
-      document.getElementById('summaryGuests').textContent = guests ? guests + ' guest' + (guests === 1 ? '' : 's') : 'Enter 1–100 guests';
-      document.getElementById('summaryDiscount').textContent = discount ? 'Early-bird group discount: 10% applied' : 'Groups of 5+ receive 10% off';
-      document.getElementById('summaryTotal').textContent = guests ? money(total) : '—';
-      return {item, guests, total};
+const scrollToSection = id =>
+  document.getElementById(id)?.scrollIntoView({
+    behavior: reduceMotion.matches ? 'instant' : 'smooth'
+  });
+
+const menu = document.getElementById('menu');
+const toggle = document.getElementById('menuToggle');
+
+function closeMenu() {
+  menu.hidden = true;
+  toggle.setAttribute('aria-expanded', 'false');
+  toggle.setAttribute('aria-label', 'Open navigation menu');
+}
+
+toggle.addEventListener('click', () => {
+  menu.hidden = !menu.hidden;
+  toggle.setAttribute('aria-expanded', String(!menu.hidden));
+  toggle.setAttribute(
+    'aria-label',
+    menu.hidden ? 'Open navigation menu' : 'Close navigation menu'
+  );
+});
+
+menu.querySelectorAll('a').forEach(a =>
+  a.addEventListener('click', closeMenu)
+);
+
+document.querySelectorAll('a[href^="#"]').forEach(a =>
+  a.addEventListener('click', e => {
+    const id = a.getAttribute('href').slice(1);
+    if (document.getElementById(id)) {
+      e.preventDefault();
+      scrollToSection(id);
     }
-    packageField.addEventListener('change', estimate); guestsField.addEventListener('input', estimate); estimate();
-    const requestedPackage = new URLSearchParams(window.location.search).get('package'); if (requestedPackage && prices[requestedPackage] && packageField) {packageField.value = requestedPackage; estimate();}
+  })
+);
 
-    const form = document.getElementById('bookingForm'), status = document.getElementById('formStatus'), submit = document.getElementById('submitButton');
-    const dateField = document.getElementById('travel_date');
-    const today = () => {const d = new Date(); return [d.getFullYear(), String(d.getMonth() + 1).padStart(2, '0'), String(d.getDate()).padStart(2, '0')].join('-')};
-    dateField.min = today();
-    function showError(message) {status.textContent = message; status.style.color = '#a12b19'; status.hidden = false}
-    form.addEventListener('submit', async event => {
-      event.preventDefault(); status.hidden = true; dateField.min = today();
-      if (!form.reportValidity()) return;
-      const {item, guests, total} = estimate();
-      if (!guests) {showError('Please enter between 1 and 100 guests.'); guestsField.focus(); return }
-      if (dateField.value < today()) {showError('Please choose today or a future travel date.'); dateField.focus(); return }
-      if (document.getElementById('website').value) return;
-      if ('YOUR_ACCESS_KEY' === 'YOUR_ACCESS_KEY') {showError('Booking email is not configured yet. Please replace YOUR_ACCESS_KEY with your Web3Forms access key before submitting.'); return }
-      submit.disabled = true; submit.textContent = 'Sending...';
-      const payload = {access_key: 'YOUR_ACCESS_KEY', subject: 'New Booking - Explore Baco', from_name: 'Explore Baco Website', name: document.getElementById('name').value.trim(), email: document.getElementById('email').value.trim(), package: item.name, travel_date: dateField.value, guests, estimated_total: money(total), message: document.getElementById('message').value.trim()};
-      try {
-        const response = await fetch('https://api.web3forms.com/submit', {method: 'POST', headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}, body: JSON.stringify(payload)});
-        const result = await response.json();
-        if (!response.ok || !result.success) throw new Error(result.message || 'The service could not accept your inquiry.');
-        form.hidden = true;
-        const success = document.getElementById('success');
-        document.getElementById('successDetails').textContent = `${item.name} · ${dateField.value} · ${guests} guest${guests === 1 ? '' : 's'} · Estimated total ${money(total)}.`;
-        success.hidden = false; success.focus();
-      } catch (error) {showError('Your inquiry was not sent. ' + (error.message || 'Please check your connection and try again.'))}
-      finally {submit.disabled = false; submit.textContent = 'SEND BOOKING INQUIRY'}
-    });
+const back = document.getElementById('backTop');
 
-    const lightbox = document.getElementById('lightbox'), lightboxImg = document.getElementById('lightboxImage'), lightboxCaption = document.getElementById('lightboxCaption');
-    let lightboxOpener = null;
-    function closeLightbox() {lightbox.hidden = true; lightboxImg.removeAttribute('src'); document.body.style.overflow = ''; lightboxOpener?.focus()}
-    document.querySelectorAll('.gallery-btn').forEach(button => button.addEventListener('click', () => {
-      const image = button.querySelector('img'); if (!image.src) return;
-      lightboxOpener = button; lightboxImg.src = image.src; lightboxImg.alt = image.alt; lightboxCaption.textContent = button.querySelector('span').textContent; lightbox.hidden = false; document.body.style.overflow = 'hidden'; document.getElementById('lightboxClose').focus();
-    }));
-    document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
-    lightbox.addEventListener('click', e => {if (e.target === lightbox) closeLightbox()});
-    document.addEventListener('keydown', e => {if (e.key === 'Escape') {if (!lightbox.hidden) closeLightbox(); else closeMenu()} if (e.key === 'Tab' && !lightbox.hidden) {e.preventDefault(); document.getElementById('lightboxClose').focus()} });
-  </script>
+window.addEventListener(
+  'scroll',
+  () => {
+    back.hidden = window.scrollY < 450;
+  },
+  { passive: true }
+);
+
+back.addEventListener('click', () =>
+  window.scrollTo({
+    top: 0,
+    behavior: reduceMotion.matches ? 'instant' : 'smooth'
+  })
+);
+
+// TOUR PACKAGE PRICES
+const prices = {
+  river: { name: 'Baco River Day Trip', price: 1500 },
+  weekend: { name: 'Baco Nature Weekend', price: 3800 },
+  culture: { name: 'Baco Culture and Adventure', price: 6200 }
+};
+
+const packageField = document.getElementById('package');
+const guestsField = document.getElementById('guests');
+const totalField = document.getElementById('estimated_total');
+
+const money = n =>
+  new Intl.NumberFormat('en-PH', {
+    style: 'currency',
+    currency: 'PHP',
+    maximumFractionDigits: 0
+  }).format(n);
+
+function estimate() {
+  const item = prices[packageField.value] || prices.river;
+  const raw = Number(guestsField.value);
+
+  const guests =
+    Number.isInteger(raw) && raw >= 1 && raw <= 100 ? raw : 0;
+
+  const discount = guests >= 5;
+  const total = item.price * guests * (discount ? 0.9 : 1);
+
+  totalField.value = guests ? money(total) : 'Enter 1–100 guests';
+
+  document.getElementById('summaryPackage').textContent =
+    item.name + ' · ' + money(item.price) + '/person';
+
+  document.getElementById('summaryGuests').textContent =
+    guests ? guests + ' guest' + (guests === 1 ? '' : 's') : 'Enter 1–100 guests';
+
+  document.getElementById('summaryDiscount').textContent =
+    discount ? 'Group discount: 10% applied' : 'Groups of 5+ receive 10% off';
+
+  document.getElementById('summaryTotal').textContent =
+    guests ? money(total) : '—';
+
+  return { item, guests, total };
+}
+
+packageField.addEventListener('change', estimate);
+guestsField.addEventListener('input', estimate);
+estimate();
+
+const requestedPackage =
+  new URLSearchParams(window.location.search).get('package');
+
+if (requestedPackage && prices[requestedPackage]) {
+  packageField.value = requestedPackage;
+  estimate();
+}
+
+// BOOKING FORM AND WEB3FORMS
+const form = document.getElementById('bookingForm');
+const status = document.getElementById('formStatus');
+const submit = document.getElementById('submitButton');
+const dateField = document.getElementById('travel_date');
+
+const ACCESS_KEY = 'a3d5294f-d464-4986-a78d-a81ee3e62a00';
+
+const today = () => {
+  const d = new Date();
+  return [
+    d.getFullYear(),
+    String(d.getMonth() + 1).padStart(2, '0'),
+    String(d.getDate()).padStart(2, '0')
+  ].join('-');
+};
+
+dateField.min = today();
+
+function showError(message) {
+  status.textContent = message;
+  status.style.color = '#a12b19';
+  status.hidden = false;
+}
+
+form.addEventListener('submit', async event => {
+  event.preventDefault();
+  status.hidden = true;
+  dateField.min = today();
+
+  if (!form.reportValidity()) return;
+
+  const { item, guests, total } = estimate();
+
+  if (!guests) {
+    showError('Please enter between 1 and 100 guests.');
+    guestsField.focus();
+    return;
+  }
+
+  if (dateField.value < today()) {
+    showError('Please choose today or a future travel date.');
+    dateField.focus();
+    return;
+  }
+
+  // Spam protection: leave this hidden field empty.
+  if (document.getElementById('website').value) return;
+
+  submit.disabled = true;
+  submit.textContent = 'Sending...';
+
+  const payload = {
+    access_key: ACCESS_KEY,
+    subject: 'New Booking - Explore Baco',
+    from_name: 'Explore Baco Website',
+    name: document.getElementById('name').value.trim(),
+    email: document.getElementById('email').value.trim(),
+    package: item.name,
+    travel_date: dateField.value,
+    guests,
+    estimated_total: money(total),
+    message: document.getElementById('message').value.trim()
+  };
+
+  try {
+    const response = await fetch(
+      'https://api.web3forms.com/submit',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(
+        result.message || 'The service could not accept your inquiry.'
+      );
+    }
+
+    form.hidden = true;
+
+    const success = document.getElementById('success');
+
+    document.getElementById('successDetails').textContent =
+      `${item.name} · ${dateField.value} · ${guests} guest${guests === 1 ? '' : 's'} · Estimated total ${money(total)}.`;
+
+    success.hidden = false;
+    success.focus();
+
+  } catch (error) {
+    showError(
+      'Your inquiry was not sent. ' +
+      (error.message || 'Please check your connection and try again.')
+    );
+
+  } finally {
+    submit.disabled = false;
+    submit.textContent = 'SEND BOOKING INQUIRY';
+  }
+});
+
+// PHOTO GALLERY LIGHTBOX
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightboxImage');
+const lightboxCaption = document.getElementById('lightboxCaption');
+
+let lightboxOpener = null;
+
+function closeLightbox() {
+  lightbox.hidden = true;
+  lightboxImg.removeAttribute('src');
+  document.body.style.overflow = '';
+  lightboxOpener?.focus();
+}
+
+document.querySelectorAll('.gallery-btn').forEach(button => {
+  button.addEventListener('click', () => {
+    const image = button.querySelector('img');
+    if (!image.src) return;
+
+    lightboxOpener = button;
+    lightboxImg.src = image.src;
+    lightboxImg.alt = image.alt;
+    lightboxCaption.textContent =
+      button.querySelector('span').textContent;
+
+    lightbox.hidden = false;
+    document.body.style.overflow = 'hidden';
+    document.getElementById('lightboxClose').focus();
+  });
+});
+
+document.getElementById('lightboxClose')
+  .addEventListener('click', closeLightbox);
+
+lightbox.addEventListener('click', e => {
+  if (e.target === lightbox) closeLightbox();
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (!lightbox.hidden) closeLightbox();
+    else closeMenu();
+  }
+
+  if (e.key === 'Tab' && !lightbox.hidden) {
+    e.preventDefault();
+    document.getElementById('lightboxClose').focus();
+  }
+});
+</script>
 
 </body>
 
